@@ -1,23 +1,28 @@
 import pygame as pg
+import numpy as np
 
 
 class Circle:
     black = (0, 0, 0)
 
     # (surface, color, center, radius)
-    def __init__(self, surface, color=black, center=(0, 0), radius=5):
+    def __init__(self, surface, color=black, center=[0, 0], radius=10, xVel=0, yVel=0, xAcc=0, yAcc=1):
         self.surface = surface
         self.color = color
-        self.center = center
+        self.center = list(center)
         self.radius = radius
-        self.xVel = 0
-        self.yVel = 0
-        self.xAcc = 0
-        self.yAcc = 1
+        self.vel = np.array([xVel, yVel], int)
+        self.acc = np.array([xAcc, yAcc], int)
 
     def drawCircle(self):
-        pg.draw.circle(self.surface, self.color, self.center, self.radius)
+        pg.draw.circle(self.surface, self.color, tuple(self.center), self.radius)
 
-    def updateSpeed(self):
-        self.yVel += self.yAcc
-        self.center = (self.center[0], self.center[1] + self.yVel)
+    def updateX(self):
+        self.center[0] += self.vel[0]
+        self.vel[0] += self.acc[0]
+
+    def updateY(self):
+        self.center[1] += self.vel[1]
+        self.vel[1] += self.acc[1]
+
+
